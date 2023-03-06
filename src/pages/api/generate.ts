@@ -26,7 +26,7 @@ export const post: APIRoute = async (context) => {
       max_tokens: 1200,
       stream: true,
     }),
-  })
+  }) as { body: Iterable<BufferSource> }
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -49,7 +49,7 @@ export const post: APIRoute = async (context) => {
       }
 
       const parser = createParser(streamParser)
-      for await (const chunk of completion.body as any) {
+      for await (const chunk of completion.body) {
         parser.feed(decoder.decode(chunk))
       }
     }
